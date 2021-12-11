@@ -1,0 +1,40 @@
+﻿"Transportation activity indicators, Transport Canada"
+"Frequency: Monthly"
+"Table: 23-10-0269-01"
+"Release date: 2021-11-17"
+"Geography: Canada"
+""
+""
+
+"Geography","Canada",,,,
+"Activity indicators","April 2021","May 2021","June 2021","July 2021","August 2021"
+,"Number",,,,
+"International passengers, number of Canadian and U.S. travellers between Canada and the United States 1  (x 1,000)","379","425","439","589","1,016"
+"International passengers, number of Canadian and non-U.S. travellers overseas, all modes of transport 2  (x 1,000)","90","78","96","205","433"
+"International freight, number of commercial vehicles travelling between Canada and the United States 3  (x 1,000)","452","443","474","448","456"
+,"Twenty feet equivalent units",,,,
+"International freight, total twenty-foot equivalent units (TEUs) handled at four major container ports 4  (x 1,000)","582.1","681.0","569.8","584.5","621.3"
+,"Dollars",,,,
+"Merchandise trade, total export of goods 5  (x 1,000,000)","48,859","49,888","55,219","51,239","53,764"
+"Merchandise trade, total import of goods 6  (x 1,000,000)","49,683","50,226","51,580","51,007","52,259"
+,"Number",,,,
+"Domestic and international passengers, air 7  (x 1,000)","572","640","937","1,896","1,152"
+"Domestic and international passengers, rail (VIA Rail) 8  (x 1,000)","45","50","78","135","202"
+
+
+
+
+Footnotes:
+1,"The number of travellers entering Canada from the United States including U.S. citizens entering Canada and Canadian citizens that have travelled out of the country and are returning home."
+2,"The number of travellers entering Canada, not including travellers from the United States. The number includes non-Canadian citizens entering Canada and Canadian citizens that have travelled out of the country and are returning home. Overseas travellers usually arrive by airplane."
+3,"The Number of commercial vehicles entering Canada from the United States at border locations."
+4,"The number of shipping containers measured in twenty-foot equivalent units (TEUs) handled at the ports in Halifax, Montréal, Prince Rupert and Vancouver. TEU is a common way to measure the amount of space in a shipping container as the containers can have different sizes."
+5,"The value of the dollar has not been adjusted for seasonal changes in movements. For exports, the mode of transport listed is the mode of transport used to send the merchandise over the Canadian border. This could be different from the mode of transport that is used when the merchandise is shipped within Canada. Total exports includes locally produced goods and foreign produced goods. The foreign produced goods are divided into two groups and both are included. The first is goods that are not modified after being imported, and the second is goods that are modified after being imported."
+6,"The value of the dollar has not been adjusted for seasonal changes in movements. For imports, the mode of transport listed is the last mode of transport used to move the cargo to the port of clearance in Canada and this is identified from the cargo control documents of customs. This may not be the mode of transport that the cargo arrived at the Canadian port of entry in cases where the import is cleared after it has crossed the border at an inland location."
+7,"The number of enplaned revenue-passengers in Canada. This includes scheduled and charter air services for domestic (within Canada), transborder (between Canada and the United States) and international travel."
+8,"The total number of passengers carried by VIA Rail, including business and economy class."
+
+
+
+"How to cite: Statistics Canada. Table 23-10-0269-01  Transportation activity indicators, Transport Canada"
+https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2310026901
