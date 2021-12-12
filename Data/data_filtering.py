@@ -10,11 +10,63 @@
 # Should try to have aggregate kinda data available.
 # That way if an MF wants to keep non-missing values in aggregate, they can.
 # However, graphing with missing and garbo values does not make sense.
+import math
 import statistics
+from typing import Optional
 
 from data_collection import OneMonthData
 import datetime
 
+
+def calculate_aggregate_measurements(data: list[OneMonthData], value: str) \
+        -> dict[str, float]:
+    """Calculate some aggregate statistical measurements on filtered data, for
+    some particular measurement.
+
+    Return a dictionary mapping measurement name to its value.
+
+    Statistical measurements are: mean, mode, median, standard deviation.
+
+    Preconditions:
+    - data has been filtered, if appropriate.
+    """
+    # TODO: some of these could be helpers, low key.
+    statistical_measurements = {}
+    values = [getattr(x, value) for x in data]
+    # calculate mean by summing and dividing.
+    statistical_measurements['mean'] = sum(values) \
+                                       / len(values)
+
+    # maps values to the number of times they occur.
+    values_to_occurrences = {}
+    for element in values:
+        if element not in values_to_occurrences:
+            values_to_occurrences[element] = 0
+        values_to_occurrences[element] += 1
+
+    # accumulator for the most common value so far (with occurrences)
+    most_common_value_so_far = [-1, -1]
+    for element in values_to_occurrences:
+        if values_to_occurrences[element] > most_common_value_so_far[1]:
+            most_common_value_so_far[0] = value
+            most_common_value_so_far[1] = values_to_occurrences[element]
+
+    statistical_measurements['mode'] = most_common_value_so_far[0]
+
+    # Sort the list and then apply the formula to get median.
+    values = sorted(values)
+    if len(values) % 2 == 0:
+        statistical_measurements['median'] = values[len(values) // 2]
+    else:
+        statistical_measurements['median'] = (values[(len(values) - 1) // 2]
+                                              + values[(len(values) + 1) // 2]) / 2
+
+    sigma_value_minus_mean = sum([value - statistical_measurements['mean'] for
+                              value in values])
+    statistical_measurements['standard deviation'] = \
+        math.sqrt(sigma_value_minus_mean ** 2 / len(values))
+
+    return  statistical_measurements
 
 def filter(filter_garbage: bool, filter_duplicates: bool,
            values_to_filter_outliers_for: list[str], raw_data: list[OneMonthData]) \
@@ -39,6 +91,7 @@ def filter(filter_garbage: bool, filter_duplicates: bool,
         filtered_values.extend(filter_outlying_value(raw_data, value))
 
     return filtered_values
+
 
 def filter_garbage_values(raw_data: list[OneMonthData]) \
         -> list[OneMonthData]:
