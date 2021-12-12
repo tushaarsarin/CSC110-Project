@@ -17,6 +17,9 @@ from typing import Optional
 from data_collection import OneMonthData
 import datetime
 
+earliest_yr_in_dataset = 2017
+latest_yr_in_dataset = 2021
+
 
 def calculate_aggregate_measurements(data: list[OneMonthData], value: str) \
         -> dict[str, float]:
@@ -96,27 +99,34 @@ def filter(filter_garbage: bool, filter_duplicates: bool,
 def filter_garbage_values(raw_data: list[OneMonthData]) \
         -> list[OneMonthData]:
     """Mutate a list of OneMonthData objects, removing any objects
-    with "garbage" instance attribute values. This filtration should not be
-    turned off, and should always be run first.
-
+    with "garbage" instance attribute values.
     Return the list of objects removed.
+
+    We recommend that this filtration not be
+    turned off, and always be run first. Though we leave the option to
+    the user.
     """
     # Remove impossible negative values, mostly.
     removed_objects = []
 
     for data_piece in raw_data:
         data_piece_attributes = vars(data_piece)
-        if not all((type(data_piece_attributes[x] is datetime.datetime
-                         or data_piece_attributes[x] >= 0 for x in vars(data_piece)))):
+        if not all(
+                (type(data_piece_attributes[x]) is datetime.datetime
+                         or data_piece_attributes[x] >= 0 for x in vars(data_piece))
+
+        ):
+            raw_data.remove(data_piece)
+            removed_objects.append(data_piece)
+
+    # Also, remove objects with impossible dates (year)
+    for data_piece in raw_data:
+        if latest_yr_in_dataset < data_piece.date.year < earliest_yr_in_dataset:
             raw_data.remove(data_piece)
             removed_objects.append(data_piece)
 
     return removed_objects
 
-
-# TODO: the system is fundamentally not set up for missing values.
-# Whoops.
-# def filter_missing_data(raw_data: list[OneMonthData]):
 
 def filter_duplicate_data(raw_data: list[OneMonthData]):
     """Mutate a list of OneMonthData objects, to remove duplicate objects.
@@ -146,6 +156,9 @@ def filter_outlying_value(raw_data: list[OneMonthData], value_name: str) \
 
     Note that this will artificially smoothen the data because outliers are
     removed indiscriminately and without justification.
+
+    Preconditions:
+    - value_name != 'date'
     """
     # Generate a list of the value in question from all the OneMonthData values.
     value_list_number_only = [getattr(bit, value_name) for bit in raw_data]

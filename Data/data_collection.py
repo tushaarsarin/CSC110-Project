@@ -5,6 +5,17 @@ import csv
 from dataclasses import dataclass
 from datetime import datetime
 
+class BadMonthError(Exception):
+    """An exception for when we attempt to make a malformed date-datetime
+    object with an invalid month. Due to the way date-datetime works
+    we can't actually just make a malformed one and allow the user the choice
+    of keeping it in or filter it out later.
+    """
+
+    def __str__(self):
+        return 'Invalid month encountered when attempting to' \
+               'construct data.'
+
 class OneMonthData:
     """A dataclass to store about a month's worth of data from the
     transportation activity dataset.
@@ -34,10 +45,8 @@ class OneMonthData:
     rail (VIA Rail) (x 1,000)
 
     Representation Invariants:
-        - date is a valid date
-        - all(x >= 0 for x in [passengers_can_us_int, passengers_can_not_us,
-        freight_can_us_vehicles, freight_intl_teu, export_cash, import_cash
-        overall_air_passengers, overall_rail_passengers])
+        - month is a valid month
+
 
     Note: the dataset does not specify a day - we use a default value of 1
     but this is vacuous.
@@ -71,6 +80,9 @@ class OneMonthData:
         """
         # Magic number clarification: most data values are scaled up by 1000.
         # Cash values are scaled down by 1 mil in the dataset. We want raw.
+        if month not in self._month_to_int:
+            raise BadMonthError
+
         self.date = datetime(year, self._month_to_int[month], 1)
         self.passengers_can_us_int = passengers_can_not_us * 1000
         self.passengers_can_not_us = passengers_can_us_int * 1000
