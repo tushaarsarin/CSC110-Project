@@ -14,6 +14,8 @@ import math
 import statistics
 from typing import Optional
 
+import pytest
+
 from data_collection import OneMonthData
 import datetime
 
@@ -51,23 +53,23 @@ def calculate_aggregate_measurements(data: list[OneMonthData], value: str) \
     most_common_value_so_far = [-1, -1]
     for element in values_to_occurrences:
         if values_to_occurrences[element] > most_common_value_so_far[1]:
-            most_common_value_so_far[0] = value
+            most_common_value_so_far[0] = element
             most_common_value_so_far[1] = values_to_occurrences[element]
 
     statistical_measurements['mode'] = most_common_value_so_far[0]
 
     # Sort the list and then apply the formula to get median.
     values = sorted(values)
-    if len(values) % 2 == 0:
+    if len(values) % 2 != 0:
         statistical_measurements['median'] = values[len(values) // 2]
     else:
         statistical_measurements['median'] = (values[(len(values) - 1) // 2]
                                               + values[(len(values) + 1) // 2]) / 2
 
-    sigma_value_minus_mean = sum([value - statistical_measurements['mean'] for
-                              value in values])
+    sigma_value_minus_mean = sum([(element - statistical_measurements['mean']) ** 2 for
+                              element in values])
     statistical_measurements['standard deviation'] = \
-        math.sqrt(sigma_value_minus_mean ** 2 / len(values))
+        math.sqrt(sigma_value_minus_mean / len(values))
 
     return  statistical_measurements
 

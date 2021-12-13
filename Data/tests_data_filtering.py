@@ -48,22 +48,22 @@ def test_no_lost_data() -> None:
     """Test that each of the filtering helpers do not lose elements somehow,
     e.g. filtered_elements + raw_data list after = raw_data list before."""
 
-    raw_data = generate_random_data(100)
+    raw_data = generate_random_data(1000)
     previous_raw_data = raw_data + []
     assert previous_raw_data == \
            data_filtering.filter_garbage_values(raw_data) + raw_data
 
-    raw_data = generate_random_data(100)
+    raw_data = generate_random_data(1000)
     previous_raw_data = raw_data + []
     assert previous_raw_data == \
            data_filtering.filter_duplicate_data(raw_data) + raw_data
 
-    raw_data = generate_random_data(100)
+    raw_data = generate_random_data(1000)
     previous_raw_data = raw_data + []
 
     # Get each instance attribute. Plug that one in as the value.
     instance_attributes = [x for x in dir(OneMonthData) if not
-    callable(getattr(OneMonthData, x))]
+    callable(getattr(OneMonthData, x)) and not x.startswith('_')]
 
     for attribute in instance_attributes:
         assert previous_raw_data == \
@@ -74,7 +74,7 @@ def test_no_duplicates() -> None:
     """Test that the duplicate filtering function, when given a list of random
     OneMonthData objects, mutates the list into one with no duplicates.
     """
-    raw_data = generate_random_data(100)
+    raw_data = generate_random_data(1000)
     data_filtering.filter_duplicate_data(raw_data)
     appearance_count = {}
     for x in raw_data:
@@ -91,7 +91,7 @@ def test_no_garbage() -> None:
     """
     import datetime
 
-    raw_data = generate_random_data(100)
+    raw_data = generate_random_data(1000)
     data_filtering.filter_garbage_values(raw_data)
     assert all((data_filtering.earliest_yr_in_dataset <= entry.date.year
                 <= data_filtering.latest_yr_in_dataset
@@ -109,7 +109,7 @@ def test_no_outliers() -> None:
     """
     import statistics
 
-    raw_data = generate_random_data(100)
+    raw_data = generate_random_data(1000)
     for value_name in dir(OneMonthData):
         # Ignore precondition-defying values, and system specials and private
         # attributes.
@@ -129,7 +129,26 @@ def test_no_outliers() -> None:
                 assert not data_filtering.is_outlier(getattr(element, value_name), q1,
                                                      q3, iqr)
 
+def test_statistical_attributes_uniform_input() -> None:
+    """Unit test for statistical attributes with a uniform input."""
+    expected = {'mean': 5000000.0, 'mode': 5000000.0, 'median': 5000000.0, 'standard deviation': 0.0}
+    object1 = OneMonthData('January', 2021, 5, 5, 5, 5, 5, 5, 5, 5)
+    object2 = OneMonthData('February', 2021, 5, 5, 5, 5, 5, 5, 5, 5)
 
+    # The function behaviour generalizes for all values. So it should be safe to just test one.
+    test_list = [object1, object2]
+    assert data_filtering.calculate_aggregate_measurements(test_list, 'export_cash') == expected
+
+def test_statistical_attributes_not_uniform_input() -> None:
+    """Unit test for statistical attributes with a non-uniform input."""
+    expected = {'mean': 2500000.0, 'mode': 5000000.0, 'median': 2500000.0, 'standard deviation': 2500000.0}
+    object1 = OneMonthData('January', 2021, 5, 5, 5, 5, 5, 5, 5, 5)
+    object2 = OneMonthData('February', 2021, 0, 0, 0, 0, 0, 0, 0, 0)
+
+    # The function behaviour generalizes for all values. So it should be safe to just test one.
+    test_list = [object1, object2]
+    assert data_filtering.calculate_aggregate_measurements(test_list, 'export_cash') == expected
 
 if __name__ == '__main__':
-    unittest.main()
+    pass
+    # whatever I decide to put in the main block.
