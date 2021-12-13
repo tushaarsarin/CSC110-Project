@@ -3,7 +3,6 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib import pyplot
 import data_collection
-import pandas
 
 def getdata(data: list[data_collection.OneMonthData], include: list[str]) -> list[[]]:
     data_so_far = []
@@ -19,7 +18,7 @@ def gettitle(items: list[str]) -> str:
     return title
 
 
-def generategraph(data: list[data_collection.OneMonthData], include: list[str], style: str, color: str) -> None:
+def generategraph(data: list[data_collection.OneMonthData], include: list[str]) -> None:
     """
     Creates a scatter plot graph given the data and 2 values to include on X and Y axis
         Preconditions
@@ -28,11 +27,10 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str], 
     """
     title = gettitle(include)
     data_to_graph = getdata(data, include)
-    pyplot.style.use(style)
     pyplot.title(title)
     plt.xlabel('Time')
     plt.ylabel('Value')
     pyplot.plot(data_to_graph, loc='lower right')
     pyplot.legend(include)
     plt.show()
-    def generatebarchart(data: list[data_collection.OneMonthData], include: list[str], style: str, color: str) -> None:
+
