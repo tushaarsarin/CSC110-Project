@@ -31,7 +31,7 @@ def generate_graph(data: list[OneMonthData], categories_to_plot: list[str]) -> N
     title = 'Graph of '+', '.join(categories_to_plot)
     plt.style.use('seaborn')
     for category in filtered_data:
-        plt.scatter(filtered_data[category][1], filtered_data[category][0], s=300, c=((random(), random(), random()),), marker='X')
+        plt.scatter(filtered_data[category][1], filtered_data[category][0], s=300, c=((random(), random(), random()),), marker='o')
     plt.xlabel('Date')
     plt.ylabel('Value')
     plt.title(title)
