@@ -39,6 +39,7 @@ def gettitle(items: list[str]) -> str:
         title += ' VS. ' + items[i]
     return title
 
+
 def generategraph(data: list[data_collection.OneMonthData], include: list[str]) -> None:
     """
     Creates a scatter plot graph given the data and 2 values to include on X and Y axis
