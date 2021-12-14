@@ -1,15 +1,15 @@
-# The purpose of this file is to handle the filtration and cleaning of any
-# and all "garbage" data that we find - if we find it.
-# Garbage data refers to OneMonthData objects with nonsensical values, e.g.
-# -999,999,999 travellers, or something like that.
+"""CSC110 Project Phase 2
 
-# Architecture:
-# Large filtration function "manager"
-# Rely on a bunch of small helpers that filter based off of a specific thing.
-# That way the user we can tick on or off certain filter types.
-# Should try to have aggregate kinda data available.
-# That way if an MF wants to keep non-missing values in aggregate, they can.
-# However, graphing with missing and garbo values does not make sense.
+FILE DESCRIPTION
+================
+This file filters and cleans 'garbage' data.
+Garbage data refers to OneMonthData objects with illogical values.
+    e.g. -2,147,483,648 passengers
+
+GROUP INFORMATION
+=================
+Tushaar Sarin, Michael Yu, Parshwa Gada, Rohan Sahota
+"""
 import math
 import statistics
 
@@ -32,7 +32,6 @@ def calculate_aggregate_measurements(data: list[OneMonthData], value: str) \
     Preconditions:
     - data has been filtered, if appropriate.
     """
-    # TODO: some of these could be helpers, low key.
     statistical_measurements = {}
     values = [getattr(x, value) for x in data]
     # calculate mean by summing and dividing.

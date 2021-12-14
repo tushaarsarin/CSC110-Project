@@ -1,3 +1,13 @@
+"""CSC110 Project Phase 2
+
+FILE DESCRIPTION
+================
+This file graphs different categories of data from the dataset, as per the user's choice.
+
+GROUP INFORMATION
+=================
+Tushaar Sarin, Michael Yu, Parshwa Gada, Rohan Sahota
+"""
 from random import random
 import matplotlib.pyplot as plt
 from data_collection import OneMonthData

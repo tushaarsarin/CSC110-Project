@@ -1,6 +1,13 @@
-# The purpose of this file is primarily to collect and organize raw data.
-# Could put filtering here too but for the moment I'm keeping it full of data
-# organizational stuff.
+"""CSC110 Project Phase 2
+
+FILE DESCRIPTION
+================
+This file collects raw data and organizes it into OneMonthData objects.
+
+GROUP INFORMATION
+=================
+Tushaar Sarin, Michael Yu, Parshwa Gada, Rohan Sahota
+"""
 import csv
 from dataclasses import dataclass
 from datetime import datetime
@@ -163,6 +170,7 @@ def process_file(filename: str) -> list[OneMonthData]:
             data_so_far.append(current_month_data)
 
     return data_so_far
+
 
 if __name__ == '__main__':
     process_file(r'TestData.csv')
