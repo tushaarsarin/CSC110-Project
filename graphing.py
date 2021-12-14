@@ -1,17 +1,17 @@
 import matplotlib.pyplot as plt
-from matplotlib import pyplot
 import data_collection
+
 
 def getdata(data: list[data_collection.OneMonthData], include: list[str]) -> list[[]]:
     data_so_far = []
     for i in include:
-        data_so_far.append([getattr(obj, i) for obj in data])
+        data_so_far.append(getattr(obj, i) for obj in data)
     return data_so_far
 
 
 def gettitle(items: list[str]) -> str:
-    title = items[0]
-    for i in range(1,len(items)):
+    title = 'Date'
+    for i in range(0, len(items)):
         title += 'VS. ' + items[i]
     return title
 
@@ -23,12 +23,16 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str]) 
             - every item in include is a valid attribute of OneMonthData
             - style is a valid pyplot font
     """
+    x = [obj.date for obj in data]
+    y = getdata(data, include)
     title = gettitle(include)
-    data_to_graph = getdata(data, include)
-    pyplot.title(title)
-    plt.xlabel('Time')
+    plt.title(title)
+    plt.style.use('seaborn')
+    plt.scatter(x, y, s=150, c='blue')
+    plt.xlabel('Date')
     plt.ylabel('Value')
-    pyplot.legend(include)
-    pyplot.plot(data_to_graph)
     plt.show()
+
+
+
 
