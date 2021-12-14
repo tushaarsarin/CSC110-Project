@@ -10,7 +10,7 @@ def getdata(data: list[data_collection.OneMonthData], include: list[str]) -> lis
 
 
 def gettitle(items: list[str]) -> str:
-    title = 'Date'
+    title = 'Date '
     for i in range(0, len(items)):
         title += 'VS. ' + items[i]
     return title
@@ -28,7 +28,7 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str]) 
     title = gettitle(include)
     plt.title(title)
     marker = 'X'
-    if 'cash' in include:
+    if 'import_cash' in include or 'export_cash' in include:
         marker = '$'
     plt.style.use('seaborn')
     plt.scatter(x, y, s=150, c='blue', marker=marker)
