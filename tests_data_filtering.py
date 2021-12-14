@@ -1,9 +1,6 @@
 # In this file are tests, and functions who support testing.
-import unittest
 import data_filtering
 from data_collection import OneMonthData
-import hypothesis.strategies
-from hypothesis import strategies
 
 
 # Hypothesis has no OneMonthData strategy... bah! Improvisation time!

@@ -1,5 +1,3 @@
-import math
-
 import matplotlib.pyplot as plt
 from matplotlib import pyplot
 import data_collection

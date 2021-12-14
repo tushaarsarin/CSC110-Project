@@ -12,9 +12,6 @@
 # However, graphing with missing and garbo values does not make sense.
 import math
 import statistics
-from typing import Optional
-
-import pytest
 
 from data_collection import OneMonthData
 import datetime
