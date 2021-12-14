@@ -30,7 +30,36 @@ def getdata(data: list[data_collection.OneMonthData], include: list[str]) -> lis
     if 'overall_rail_passengers' in include:
         x_data_so_far.append([obj.overall_rail_passengers for obj in data])
         y_data_so_far.append([obj.date.month for obj in data])
-    return [x_data_so_far, y_data_so_far]
+    y_data_to_months = []
+    for i in y_data_so_far:
+        for j in i:
+            if j == 1:
+                y_data_to_months.append('Jan')
+            elif j == 2:
+                y_data_to_months.append('Feb')
+            elif j ==3:
+                y_data_to_months.append('Mar')
+            elif j == 4:
+                y_data_to_months.append('Apr')
+            elif j == 5:
+                y_data_to_months.append('May')
+            elif j == 6:
+                y_data_to_months.append('Jun')
+            elif j == 7:
+                y_data_to_months.append('Jul')
+            elif j == 8:
+                y_data_to_months.append('Aug')
+            elif j == 9:
+                y_data_to_months.append('Sept')
+            elif j == 10:
+                y_data_to_months.append('Oct')
+            elif j == 11:
+                y_data_to_months.append('Nov')
+            elif j == 12:
+                y_data_to_months.append('Dec')
+            else:
+                return 'Something messed up'
+    return [x_data_so_far, y_data_to_months]
 
 
 def gettitle(items: list[str]) -> str:
@@ -55,7 +84,8 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str]) 
     if 'import_cash' in include or 'export_cash' in include:
        color = 'green'
     plt.style.use('seaborn')
-    plt.scatter(fitered_data[0], fitered_data[1], s=300, c=color, marker=marker)
+    print(fitered_data[1])
+    plt.scatter(fitered_data[1], fitered_data[0], s=300, c=color, marker=marker)
     plt.xlabel('Date')
     plt.ylabel('Value')
     dollar_marker = img.imread('img/cash.png')
