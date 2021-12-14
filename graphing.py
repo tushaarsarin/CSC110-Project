@@ -24,7 +24,7 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str]) 
             - style is a valid pyplot font
     """
     x = [obj.date for obj in data]
-    y = getdata(data, include)
+    y = [getattr(obj, include[0]) for obj in data]
     title = gettitle(include)
     plt.title(title)
     marker = 'X'
