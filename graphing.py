@@ -27,8 +27,11 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str]) 
     y = getdata(data, include)
     title = gettitle(include)
     plt.title(title)
+    marker = 'X'
+    if 'cash' in include:
+        marker = '$'
     plt.style.use('seaborn')
-    plt.scatter(x, y, s=150, c='blue')
+    plt.scatter(x, y, s=150, c='blue', marker=marker)
     plt.xlabel('Date')
     plt.ylabel('Value')
     plt.show()
