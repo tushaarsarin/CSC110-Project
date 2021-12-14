@@ -6,39 +6,30 @@ import matplotlib.image as img
 def getdata(data: list[data_collection.OneMonthData], include: list[str]) -> list[[]]:
     x_data_so_far = []
     y_data_so_far = []
-    passengers_can_us_int: int
-    passengers_can_not_us: int
-    freight_can_us_vehicles: int
-    freight_intl_teu: float
-    export_cash: float
-    import_cash: float
-    overall_air_passengers: int
-    overall_rail_passengers: int
-    for i in data:
-        if 'passengers_can_us_int' in include:
-            x_data_so_far.append(i.passengers_can_not_us)
-            y_data_so_far.append(i.date.month)
-        if 'passengers_can_not_us' in include:
-            x_data_so_far.append(i.passengers_can_us_int)
-            y_data_so_far.append(i.date.month)
-        if 'freight_can_us_vehicles' in include:
-            x_data_so_far.append(i.freight_can_us_vehicles)
-            y_data_so_far.append(i.date.month)
-        if 'freight_intl_teu' in include:
-            x_data_so_far.append(i.freight_intl_teu)
-            y_data_so_far.append(i.date.month)
-        if 'export_cash' in include:
-            x_data_so_far.append(i.export_cash)
-            y_data_so_far.append(i.date.month)
-        if 'import_cash' in include:
-            x_data_so_far.append(i.import_cash)
-            y_data_so_far.append(i.date.month)
-        if 'overall_air_passengers' in include:
-            x_data_so_far.append(i.overall_air_passengers)
-            y_data_so_far.append(i.date.month)
-        if 'overall_rail_passengers' in include:
-            x_data_so_far.append(i.overall_rail_passengers)
-            y_data_so_far.append(i.date.month)
+    if 'passengers_can_us_int' in include:
+        x_data_so_far.append([obj.passengers_can_not_us for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'passengers_can_not_us' in include:
+        x_data_so_far.append([obj.passengers_can_us_int for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'freight_can_us_vehicles' in include:
+        x_data_so_far.append([obj.freight_can_us_vehicles for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'freight_intl_teu' in include:
+        x_data_so_far.append([obj.freight_intl_teu for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'export_cash' in include:
+        x_data_so_far.append([obj.export_cash for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'import_cash' in include:
+        x_data_so_far.append([obj.import_cash for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'overall_air_passengers' in include:
+        x_data_so_far.append([obj.overall_air_passengers for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
+    if 'overall_rail_passengers' in include:
+        x_data_so_far.append([obj.overall_rail_passengers for obj in data])
+        y_data_so_far.append([obj.date.month for obj in data])
     return [x_data_so_far, y_data_so_far]
 
 
