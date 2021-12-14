@@ -165,5 +165,4 @@ def process_file(filename: str) -> list[OneMonthData]:
     return data_so_far
 
 if __name__ == '__main__':
-    pass
-    # Whatever I decide to put in the main block.
+    process_file(r'TestData.csv')

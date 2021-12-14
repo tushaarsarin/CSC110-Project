@@ -12,27 +12,28 @@ Tushaar Sarin, Michael Yu, Parshwa Gada, Rohan Sahota
 import tkinter as tk
 from dataclasses import dataclass
 
-import data_collection
-import data_collection as dc
-import data_filtering as df
+from data_collection import OneMonthData, process_file
+from data_filtering import filter
 import graphing
 
 
 @dataclass
 class CSProject:
     """Renders the main window for the Project."""
-    data: list[dc.OneMonthData]
+    data: list[OneMonthData]
     categories_to_plot: list[str]
     categories_to_filter: list[str]
+    additional_filters: list[str]
     _window: tk.Tk
     _frame_categories: tk.LabelFrame
     _frame_filters: tk.LabelFrame
-    update_categories_btn: tk.Button
-    update_filters_btn: tk.Button
+    update_graph_btn: tk.Button
     category_to_value: dict[str, tk.IntVar]
     category_to_checkbox: dict[str, tk.Checkbutton]
     filter_to_value: dict[str, tk.IntVar]
     filter_to_checkbox: dict[str, tk.Checkbutton]
+    additional_filter_to_value: dict[str, tk.IntVar]
+    additional_filter_to_checkbox: dict[str, tk.Checkbutton]
 
     def __init__(self, title: str = 'Title', dimensions: tuple[int, int] = (1280, 720), offset: tuple[int, int] = None):
         # main window:
@@ -45,12 +46,10 @@ class CSProject:
         # frame objects:
         ################################################################################################################
         self._frame_categories = tk.LabelFrame(self._window, text='Data Categories', padx=5, pady=5)
-        self._frame_categories.grid(row=0, column=0, padx=10)
+        self._frame_categories.grid(row=0, column=0, padx=10, pady=10)
 
-        self._frame_filters = tk.LabelFrame(self._window, text='Filter Options', padx=5, pady=5)
-        self._frame_filters.grid(row=1, column=0, padx=10)
-
-        # self._frame_additional_filters
+        self._frame_filters = tk.LabelFrame(self._window, text='Outlier Filtration Options', padx=5, pady=5)
+        self._frame_filters.grid(row=1, column=0, padx=10, pady=10)
         ################################################################################################################
 
         self.render_category_options()
@@ -121,12 +120,6 @@ USA/Canada.', variable=self.category_to_value['freight_can_us_vehicles']).pack(s
         }
         ################################################################################################################
 
-        # update button:
-        ################################################################################################################
-        self.update_categories_btn = tk.Button(self._frame_categories, text='Update',
-                                               command=self.update_categories).pack(side=tk.TOP, anchor=tk.E)
-        ################################################################################################################
-
     def render_filter_options(self) -> None:
         """Displays the data category options to filter."""
         # checkbox values:
@@ -180,10 +173,29 @@ USA/Canada.', variable=self.filter_to_value['freight_can_us_vehicles']).pack(sid
         }
         ################################################################################################################
 
+        # additional filter checkbox values
+        ################################################################################################################
+        self.additional_filter_to_value = {
+            'filter_garbage': tk.IntVar(),
+            'filter_duplicates': tk.IntVar()
+        }
+        ################################################################################################################
+
+        # additional filter checkbox objects:
+        ################################################################################################################
+        self.additional_filter_to_checkbox = {
+            'filter_garbage': tk.Checkbutton(self._frame_filters, text='Filter garbage data.',
+                                             variable=self.additional_filter_to_value['filter_garbage'
+                                             ]).pack(side=tk.TOP, anchor=tk.W),
+            'filter_duplicates': tk.Checkbutton(self._frame_filters, text='Filter duplicate data.',
+                                             variable=self.additional_filter_to_value['filter_duplicates'
+                                             ]).pack(side=tk.TOP, anchor=tk.W)
+        }
+
         # update button:
         ################################################################################################################
-        self.update_filters_btn = tk.Button(self._frame_filters, text='Update',
-                                            command=self.update_filters).pack(side=tk.TOP, anchor=tk.E)
+        self.update_graph_btn = tk.Button(self._frame_filters, text='Render Graph',
+                                            command=self.update_graph).pack(side=tk.TOP, anchor=tk.E)
         ################################################################################################################
 
     def load_default_categories(self) -> None:
@@ -199,22 +211,33 @@ USA/Canada.', variable=self.filter_to_value['freight_can_us_vehicles']).pack(sid
             'overall_rail_passengers'
         ]
 
+    def update_graph(self) -> None:
+        self.update_categories()
+        self.update_additional_filters()
+        filtered_data = self.update_filters()
+        self.draw_graph(filtered_data)
+
+
     def update_categories(self) -> None:
         """Update categories_to_plot to plot the selected data categories."""
         self.categories_to_plot = [category for category in self.category_to_value if
                                    self.category_to_value[category].get() == 1]
-        self.draw_graph()
+        if not self.categories_to_plot:
+            self.load_default_categories()
 
-    def update_filters(self) -> None:
+    def update_filters(self) -> list[OneMonthData]:
         self.categories_to_filter = [filter for filter in self.filter_to_value if
                                      self.filter_to_value[filter].get() == 1]
-        filtered_data = self.filter_values()
-        self.draw_graph(filtered_data)
+        return self.filter_values()
 
-    def filter_values(self) -> list[dc.OneMonthData]:
-        return df.filter(False, False, self.categories_to_filter, self.data)
+    def update_additional_filters(self) -> None:
+        self.additional_filters = [self.additional_filter_to_value[additional_filter].get() == 1 for
+                                   additional_filter in self.additional_filter_to_value]
 
-    def draw_graph(self, custom_data: dc.OneMonthData = None) -> None:
+    def filter_values(self) -> list[OneMonthData]:
+        return filter(self.additional_filters[0], self.additional_filters[1], self.categories_to_filter, self.data)
+
+    def draw_graph(self, custom_data: list[OneMonthData] = None) -> None:
         if custom_data:
             graphing.generate_graph(custom_data, self.categories_to_plot)
         else:
@@ -223,10 +246,9 @@ USA/Canada.', variable=self.filter_to_value['freight_can_us_vehicles']).pack(sid
     def render_window(self) -> None:
         """Begin rendering the main window."""
         self._window.mainloop()
-        self.draw_graph()
 
 
 if __name__ == '__main__':
-    project = CSProject('CSC110 Project: People, Cargo & CoVID', (1280, 720))
-    project.data = dc.process_file(r'TestData.csv')
+    project = CSProject('CSC110 Project: People, Cargo & CoVID', (450, 600))
+    project.data = process_file(r'TestData.csv')
     project.render_window()
