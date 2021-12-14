@@ -1,16 +1,15 @@
+from random import random
 import matplotlib.pyplot as plt
 from data_collection import OneMonthData
-from random import random
 
 
-def get_data(data: list[OneMonthData], categories_to_plot: list[str]) -> tuple[list[int], list[int]]:
+def get_data(data: list[OneMonthData], categories_to_plot: list[str]) -> dict[str, tuple[list[int], list[int]]]:
     values = {}
     for category in categories_to_plot:
         values[category] = (list(), list())
         for one_month_data in data:
             values[category][0].append(getattr(one_month_data, category))
             values[category][1].append(one_month_data.date.month)
-
     return values
 
 
