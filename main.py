@@ -11,9 +11,7 @@ Tushaar Sarin, Michael Yu, Parshwa Gada, Rohan Sahota
 """
 import tkinter as tk
 from dataclasses import dataclass
-import data_collection as dc
-import data_filtering as df
-import graphing
+from Data import data_collection as dc
 
 
 @dataclass
@@ -45,23 +43,12 @@ class CSProject:
         self._frame_categories = tk.LabelFrame(self._window, text='Data Categories', padx=5, pady=5)
         self._frame_categories.grid(row=0, column=0, padx=10)
 
-        self._frame_filters = tk.LabelFrame(self._window, text='Filter Options', padx=5, pady=5)
+        self._frame_filters = tk.LabelFrame(self._window, text='Data Categories', padx=5, pady=5)
         self._frame_filters.grid(row=1, column=0, padx=10)
         ################################################################################################################
 
         self.render_category_options()
         self.render_filter_options()
-
-        self.categories_to_plot = [
-            'passengers_can_us_int',
-            'passengers_can_not_us',
-            'freight_can_us_vehicles',
-            'freight_intl_teu',
-            'export_cash',
-            'import_cash',
-            'overall_air_passengers',
-            'overall_rail_passengers'
-        ]
 
     def position_window(self, dimensions: tuple[int, int], offset: tuple[int, int]) -> None:
         """Position the window on-screen."""
@@ -194,19 +181,13 @@ USA/Canada.', variable=self.filter_to_value['freight_can_us_vehicles']).pack(sid
     def update_categories(self) -> None:
         self.categories_to_plot = [category for category in self.category_to_value if
                                    self.category_to_value[category].get() == 1]
-        self.draw_graph()
 
     def update_filters(self) -> None:
         self.categories_to_filter = [filter for filter in self.filter_to_value if
                                      self.filter_to_value[filter].get() == 1]
-        self.filter_values()
-        self.draw_graph()
-
-    def filter_values(self) -> None:
-        self.data = df.filter(False, False, self.categories_to_filter, self.data)
 
     def draw_graph(self) -> None:
-        graphing.generategraph(self.data, self.categories_to_plot)
+        pass
 
     def render_window(self) -> None:
         """Begin rendering the main window."""
@@ -216,5 +197,5 @@ USA/Canada.', variable=self.filter_to_value['freight_can_us_vehicles']).pack(sid
 
 if __name__ == '__main__':
     project = CSProject('CSC110 Project: People, Cargo & CoVID', (1280, 720))
-    project.data = dc.process_file(r'TestData.csv')
+    project.data = dc.process_file(r'Data/TestData.csv')
     project.render_window()

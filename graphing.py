@@ -28,7 +28,7 @@ def generategraph(data: list[data_collection.OneMonthData], include: list[str]) 
     pyplot.title(title)
     plt.xlabel('Time')
     plt.ylabel('Value')
-    pyplot.plot(data_to_graph, loc='lower right')
     pyplot.legend(include)
+    pyplot.plot(data_to_graph)
     plt.show()
 
